@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import ru.urfu.movie_explorer.R
-import ru.urfu.movie_explorer.data.model.Movie
+import ru.urfu.movie_explorer.domain.model.Movie
 
 /**
  * Экран списка фильмов. Подписывается на [MoviesViewModel] и рисует одно
@@ -86,7 +86,18 @@ private fun MoviesScreenContent(
 
             is MoviesUiState.Content -> MoviesList(
                 movies = state.movies,
+                isRefreshing = state.isRefreshing,
                 onMovieClick = onMovieClick,
+            )
+        }
+        if (state is MoviesUiState.Content && state.isRefreshing && state.movies.isNotEmpty()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(16.dp)
+                    .size(20.dp),
+                strokeWidth = 2.dp,
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }
@@ -95,9 +106,12 @@ private fun MoviesScreenContent(
 @Composable
 private fun MoviesList(
     movies: List<Movie>,
+    isRefreshing: Boolean,
     onMovieClick: (Movie) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("unused")
+    val refreshing = isRefreshing
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -164,15 +178,14 @@ private fun MovieListItem(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = buildString {
-                        append(movie.year)
+                        if (movie.year != null) append(movie.year)
                         if (movie.genres.isNotEmpty()) {
-                            append(" • ")
+                            if (isNotEmpty()) append(" • ")
                             append(movie.genres.joinToString())
                         }
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
                 )
                 Spacer(Modifier.height(8.dp))
                 RatingChip(rating = movie.rating)
@@ -269,7 +282,8 @@ private fun ErrorContent(
         )
         Spacer(Modifier.height(8.dp))
         TextButton(onClick = onRetry) {
-            Text(text = "Повторить")
+            Text(text = stringResource(R.string.action_retry))
         }
     }
 }
+

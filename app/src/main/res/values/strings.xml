@@ -2,28 +2,41 @@
     <string name="app_name">Movie Explorer</string>
 
     <!-- Bottom navigation -->
-    <string name="nav_movies">Фильмы</string>
-    <string name="nav_search">Поиск</string>
-    <string name="nav_profile">Профиль</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_profile">Profile</string>
 
     <!-- Movies list -->
-    <string name="movies_title">Популярные фильмы</string>
-    <string name="movies_subtitle">Подборка самых популярных фильмов за все время</string>
+    <string name="movies_title">Popular Movies</string>
+    <string name="movies_subtitle">A selection of the most popular movies right now</string>
 
     <!-- Movie details -->
-    <string name="details_title">О фильме</string>
-    <string name="details_overview">Описание</string>
-    <string name="details_genres">Жанры</string>
-    <string name="details_runtime">Длительность</string>
-    <string name="details_rating">Рейтинг</string>
-    <string name="details_year">Год</string>
-    <string name="details_director">Режиссёр</string>
-    <string name="details_back">Назад</string>
+    <string name="details_title">About the Movie</string>
+    <string name="details_overview">Overview</string>
+    <string name="details_genres">Genres</string>
+    <string name="details_runtime">Runtime</string>
+    <string name="details_rating">Rating</string>
+    <string name="details_year">Year</string>
+    <string name="details_director">Director</string>
+    <string name="details_cast">Cast</string>
+    <string name="details_back">Back</string>
 
-    <!-- Other tabs -->
-    <string name="search_placeholder">Поиск скоро появится</string>
-    <string name="profile_placeholder">Профиль в разработке</string>
+    <!-- Search -->
+    <string name="search_placeholder">Enter a movie title</string>
+    <string name="search_clear">Clear</string>
+    <string name="search_hint">Start typing to see results</string>
+    <string name="search_empty">Nothing matched your query</string>
+
+    <!-- Profile -->
+    <string name="profile_placeholder">Profile is under construction</string>
+
+    <!-- Common actions -->
+    <string name="action_retry">Retry</string>
+
+    <!-- Errors -->
+    <string name="error_loading">Failed to load data</string>
+    <string name="error_movie_not_found">Movie not found</string>
 
     <!-- A11y -->
-    <string name="a11y_poster">Постер фильма</string>
+    <string name="a11y_poster">Movie poster</string>
 </resources>

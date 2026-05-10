@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.urfu.movie_explorer.data.repository.MovieRepository
+import ru.urfu.movie_explorer.domain.model.MovieError
+import ru.urfu.movie_explorer.domain.usecase.GetMovieDetailsUseCase
 
 /**
  * ViewModel экрана деталей фильма.
  */
 class MovieDetailsViewModel(
-    private val repository: MovieRepository,
+    private val getMovieDetails: GetMovieDetailsUseCase,
     private val movieId: String,
 ) : ViewModel() {
 
@@ -23,17 +24,18 @@ class MovieDetailsViewModel(
         loadMovie()
     }
 
+    fun retry() {
+        loadMovie()
+    }
+
     private fun loadMovie() {
         _uiState.value = MovieDetailsUiState.Loading
         viewModelScope.launch {
-            _uiState.value = runCatching { repository.getMovieById(movieId) }
-                .fold(
-                    onSuccess = { movie ->
-                        if (movie != null) MovieDetailsUiState.Content(movie)
-                        else MovieDetailsUiState.Error("Фильм не найден")
-                    },
-                    onFailure = { MovieDetailsUiState.Error(it.message ?: "Ошибка загрузки") },
-                )
+            _uiState.value = try {
+                MovieDetailsUiState.Content(getMovieDetails(movieId))
+            } catch (e: MovieError) {
+                MovieDetailsUiState.Error(e.message ?: "Ошибка загрузки")
+            }
         }
     }
 }

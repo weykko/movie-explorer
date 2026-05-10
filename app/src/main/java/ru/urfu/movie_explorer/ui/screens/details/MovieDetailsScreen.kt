@@ -20,8 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.foundation.border
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,6 +37,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,7 +49,7 @@ import coil.compose.SubcomposeAsyncImage
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 import ru.urfu.movie_explorer.R
-import ru.urfu.movie_explorer.data.model.Movie
+import ru.urfu.movie_explorer.domain.model.Movie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,14 +94,22 @@ fun MovieDetailsScreen(
                     color = MaterialTheme.colorScheme.primary,
                 )
 
-                is MovieDetailsUiState.Error -> Text(
-                    text = state.message,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    style = MaterialTheme.typography.bodyLarge,
+                is MovieDetailsUiState.Error -> Column(
                     modifier = Modifier
                         .align(Alignment.Center)
                         .padding(24.dp),
-                )
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text = state.message,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    androidx.compose.material3.TextButton(onClick = viewModel::retry) {
+                        Text(text = stringResource(R.string.action_retry))
+                    }
+                }
 
                 is MovieDetailsUiState.Content -> MovieDetailsContent(state.movie)
             }
@@ -132,12 +141,14 @@ private fun MovieDetailsContent(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Section(title = stringResource(R.string.details_overview)) {
-                    Text(
-                        text = movie.plot,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
+                if (!movie.plot.isNullOrBlank()) {
+                    Section(title = stringResource(R.string.details_overview)) {
+                        Text(
+                            text = movie.plot,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    }
                 }
 
                 if (!movie.director.isNullOrBlank()) {
@@ -151,7 +162,7 @@ private fun MovieDetailsContent(
                 }
 
                 if (movie.cast.isNotEmpty()) {
-                    Section(title = "В ролях") {
+                    Section(title = stringResource(R.string.details_cast)) {
                         Text(
                             text = movie.cast.joinToString(),
                             style = MaterialTheme.typography.bodyLarge,
@@ -164,10 +175,6 @@ private fun MovieDetailsContent(
     }
 }
 
-/**
- * Шапка экрана реализована через ConstraintLayout: он связывает постер,
- * блок с названием и мета-информацию относительно друг друга — как и требует задание.
- */
 @Composable
 private fun MovieDetailsHeader(
     movie: Movie,
@@ -227,14 +234,19 @@ private fun MovieDetailsHeader(
             })
         }
 
-        RatingPill(
-            rating = movie.rating,
-            votes = movie.votes,
-            modifier = Modifier.constrainAs(ratingChip) {
-                top.linkTo(originalTitle.bottom, margin = 12.dp)
-                start.linkTo(title.start)
-            },
-        )
+        val ratingChipModifier = Modifier.constrainAs(ratingChip) {
+            top.linkTo(originalTitle.bottom, margin = 12.dp)
+            start.linkTo(title.start)
+        }
+        if (movie.rating != null) {
+            RatingPill(
+                rating = movie.rating,
+                votes = movie.votes,
+                modifier = ratingChipModifier,
+            )
+        } else {
+            Box(modifier = ratingChipModifier)
+        }
 
         MetaRow(
             year = movie.year,
@@ -249,9 +261,6 @@ private fun MovieDetailsHeader(
     }
 }
 
-/**
- * Постер фильма на экране деталей.
- */
 @Composable
 private fun PosterImage(
     posterUrl: String?,
@@ -303,11 +312,10 @@ private fun PosterImage(
 
 @Composable
 private fun RatingPill(
-    rating: Double?,
+    rating: Double,
     votes: Int?,
     modifier: Modifier = Modifier,
 ) {
-    if (rating == null) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -341,7 +349,7 @@ private fun RatingPill(
 
 @Composable
 private fun MetaRow(
-    year: Int,
+    year: Int?,
     runtimeMinutes: Int?,
     modifier: Modifier = Modifier,
 ) {
@@ -349,7 +357,12 @@ private fun MetaRow(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        MetaLine(label = stringResource(R.string.details_year), value = year.toString())
+        if (year != null) {
+            MetaLine(
+                label = stringResource(R.string.details_year),
+                value = year.toString(),
+            )
+        }
         if (runtimeMinutes != null) {
             MetaLine(
                 label = stringResource(R.string.details_runtime),
@@ -381,23 +394,60 @@ private fun GenreRow(
     genres: List<String>,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        genres.forEach { genre ->
-            AssistChip(
-                onClick = {},
-                label = { Text(text = genre) },
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    labelColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                border = AssistChipDefaults.assistChipBorder(
-                    enabled = true,
-                    borderColor = MaterialTheme.colorScheme.outline,
-                ),
+    FlowLayout(modifier = modifier.fillMaxWidth(), spacing = 8.dp) {
+        genres.forEach { GenreChip(text = it) }
+    }
+}
+
+@Composable
+private fun GenreChip(text: String, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(8.dp),
             )
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+    }
+}
+
+@Composable
+private fun FlowLayout(
+    modifier: Modifier = Modifier,
+    spacing: androidx.compose.ui.unit.Dp = 0.dp,
+    content: @Composable () -> Unit,
+) {
+    Layout(content = content, modifier = modifier) { measurables, constraints ->
+        val gap = spacing.roundToPx()
+        val maxWidth = constraints.maxWidth
+        val placeables = measurables.map { it.measure(Constraints(maxWidth = maxWidth)) }
+
+        var x = 0
+        var y = 0
+        var rowHeight = 0
+        val positions = placeables.map { placeable ->
+            if (x > 0 && x + placeable.width > maxWidth) {
+                x = 0
+                y += rowHeight + gap
+                rowHeight = 0
+            }
+            val pos = x to y
+            x += placeable.width + gap
+            rowHeight = maxOf(rowHeight, placeable.height)
+            pos
+        }
+
+        layout(width = maxWidth, height = (y + rowHeight).coerceAtLeast(constraints.minHeight)) {
+            placeables.forEachIndexed { i, p -> p.placeRelative(positions[i].first, positions[i].second) }
         }
     }
 }
@@ -420,14 +470,16 @@ private fun Section(
 }
 
 private fun formatRuntime(minutes: Int): String {
-    val h = minutes / 60
-    val m = minutes % 60
+    val h = minutes / MINUTES_IN_HOUR
+    val m = minutes % MINUTES_IN_HOUR
     return when {
-        h == 0 -> "${m} мин"
-        m == 0 -> "${h} ч"
-        else -> "${h} ч ${m} мин"
+        h == 0 -> "$m min"
+        m == 0 -> "$h h"
+        else -> "$h h $m min"
     }
 }
+
+private const val MINUTES_IN_HOUR = 60
 
 private fun formatVotes(votes: Int): String = when {
     votes >= 1_000_000 -> "%.1fM".format(votes / 1_000_000.0)

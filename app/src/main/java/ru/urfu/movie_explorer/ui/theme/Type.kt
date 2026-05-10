@@ -6,7 +6,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Используем системный шрифт — он чистый, читаемый и не требует включения собственных файлов.
 val MovieExplorerTypography = Typography(
     displaySmall = TextStyle(
         fontFamily = FontFamily.Default,

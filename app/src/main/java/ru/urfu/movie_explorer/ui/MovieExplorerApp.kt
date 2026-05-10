@@ -27,6 +27,7 @@ import ru.urfu.movie_explorer.ui.navigation.TopLevelTab
 import ru.urfu.movie_explorer.ui.screens.details.MovieDetailsScreen
 import ru.urfu.movie_explorer.ui.screens.movies.MoviesScreen
 import ru.urfu.movie_explorer.ui.screens.placeholder.PlaceholderScreen
+import ru.urfu.movie_explorer.ui.screens.search.SearchScreen
 
 /**
  * Корневой composable: содержит нижнюю навигацию и граф экранов.
@@ -69,9 +70,10 @@ fun MovieExplorerApp() {
                 }
 
                 composable<Destination.Search> {
-                    PlaceholderScreen(
-                        title = stringResource(TopLevelTab.Search.labelResId),
-                        message = stringResource(ru.urfu.movie_explorer.R.string.search_placeholder),
+                    SearchScreen(
+                        onMovieClick = { movie ->
+                            navController.navigate(Destination.MovieDetails(movie.id))
+                        },
                     )
                 }
 

@@ -1,6 +1,6 @@
 package ru.urfu.movie_explorer.ui.screens.details
 
-import ru.urfu.movie_explorer.data.model.Movie
+import ru.urfu.movie_explorer.domain.model.Movie
 
 sealed interface MovieDetailsUiState {
 

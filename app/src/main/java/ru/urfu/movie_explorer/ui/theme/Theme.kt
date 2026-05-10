@@ -23,11 +23,6 @@ private val MovieExplorerDarkColors = darkColorScheme(
     outline = OutlineDark,
 )
 
-/**
- * Тема приложения на Material 3.
- * Принудительно использует тёмную цветовую схему, чтобы фиолетовые акценты
- * выглядели одинаково вне зависимости от системных настроек.
- */
 @Composable
 fun MovieExplorerTheme(
     @Suppress("UNUSED_PARAMETER") darkTheme: Boolean = isSystemInDarkTheme(),
