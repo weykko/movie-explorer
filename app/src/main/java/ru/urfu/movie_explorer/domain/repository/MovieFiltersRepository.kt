@@ -2,12 +2,10 @@ package ru.urfu.movie_explorer.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.urfu.movie_explorer.domain.model.MovieFilters
+import ru.urfu.movie_explorer.domain.model.MovieSortOption
 
 /**
  * Контракт хранилища настроек фильтрации.
- *
- * Реализация (data-слой) использует DataStore Preferences и обеспечивает,
- * что настройки сохраняются между перезапусками приложения.
  */
 interface MovieFiltersRepository {
 
@@ -17,6 +15,9 @@ interface MovieFiltersRepository {
     /** Полностью заменяет сохранённые фильтры. */
     suspend fun update(filters: MovieFilters)
 
-    /** Сбрасывает фильтры в [MovieFilters.Empty]. */
+    /** Меняет только сортировку, не трогая остальные поля. `null` сбрасывает её. */
+    suspend fun updateSort(sortBy: MovieSortOption?)
+
+    /** Сбрасывает фильтры в [MovieFilters.Empty]; сортировка не сбрасывается. */
     suspend fun clear()
 }

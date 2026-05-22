@@ -15,9 +15,6 @@ import ru.urfu.movie_explorer.domain.usecase.ToggleFavoriteMovieUseCase
 
 /**
  * ViewModel экрана деталей фильма.
- *
- * Помимо собственно деталей публикует и наблюдает за признаком «в избранном» через
- * Room — это позволяет переключать сердечко без перезагрузки экрана.
  */
 class MovieDetailsViewModel(
     private val getMovieDetails: GetMovieDetailsUseCase,

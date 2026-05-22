@@ -15,10 +15,6 @@ import ru.urfu.movie_explorer.ui.common.FiltersBadgeCache
 
 /**
  * ViewModel экрана настроек фильтрации списка фильмов.
- *
- * При старте подтягивает сохранённые в DataStore фильтры; пользовательские изменения
- * не записываются в DataStore немедленно — только по нажатию «Готово». Это позволяет
- * пользователю отказаться от изменений, просто закрыв экран.
  */
 class FiltersViewModel(
     private val observeMovieFilters: ObserveMovieFiltersUseCase,
@@ -36,7 +32,9 @@ class FiltersViewModel(
             _uiState.value = FiltersUiState(
                 genre = saved.genre,
                 minRating = saved.minRating,
+                minVoteCount = saved.minVoteCount,
                 minYear = saved.minYear,
+                maxYear = saved.maxYear,
             )
         }
     }
@@ -49,8 +47,16 @@ class FiltersViewModel(
         _uiState.value = _uiState.value.copy(minRating = value, isSaved = false)
     }
 
+    fun onMinVoteCountChanged(value: Int?) {
+        _uiState.value = _uiState.value.copy(minVoteCount = value, isSaved = false)
+    }
+
     fun onMinYearChanged(value: Int?) {
         _uiState.value = _uiState.value.copy(minYear = value, isSaved = false)
+    }
+
+    fun onMaxYearChanged(value: Int?) {
+        _uiState.value = _uiState.value.copy(maxYear = value, isSaved = false)
     }
 
     fun apply() {
@@ -58,7 +64,9 @@ class FiltersViewModel(
         val filters = MovieFilters(
             genre = current.genre,
             minRating = current.minRating,
+            minVoteCount = current.minVoteCount,
             minYear = current.minYear,
+            maxYear = current.maxYear,
         )
         viewModelScope.launch {
             updateMovieFilters(filters)

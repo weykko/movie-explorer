@@ -7,8 +7,8 @@
     <string name="nav_favorites">Favorites</string>
 
     <!-- Movies list -->
-    <string name="movies_title">Popular Movies</string>
-    <string name="movies_subtitle">A selection of the most popular movies right now</string>
+    <string name="movies_title">Movie Explorer</string>
+    <string name="movies_subtitle">A database for finding your favorite movies</string>
 
     <!-- Movie details -->
     <string name="details_title">About the Movie</string>
@@ -40,11 +40,22 @@
     <string name="filters_genre">Genre</string>
     <string name="filters_any">Any</string>
     <string name="filters_min_rating">Minimum rating</string>
-    <string name="filters_min_year">Released after (year)</string>
+    <string name="filters_min_votes">Minimum number of ratings</string>
+    <string name="filters_year_range">Release year</string>
+    <string name="filters_year_from">From</string>
+    <string name="filters_year_to">To</string>
     <string name="filters_apply">Apply</string>
     <string name="filters_reset">Reset</string>
     <string name="filters_active_badge">Filters are active</string>
     <string name="filters_empty_result">No movies match the current filters</string>
+
+    <!-- Sorting -->
+    <string name="sort_open">Sort</string>
+    <string name="sort_title">Sort by</string>
+    <string name="sort_none">Default (popularity)</string>
+    <string name="sort_release_date">Release date</string>
+    <string name="sort_user_rating">User rating</string>
+    <string name="sort_rating_count">Number of ratings</string>
 
     <!-- Common actions -->
     <string name="action_retry">Retry</string>
@@ -52,6 +63,9 @@
     <!-- Errors -->
     <string name="error_loading">Failed to load data</string>
     <string name="error_movie_not_found">Movie not found</string>
+    <string name="error_server_unavailable">Movie database is currently unavailable. Please try again later.</string>
+    <string name="error_request_failed">Something went wrong while loading movies. Try changing your filters or retry.</string>
+    <string name="error_network">No connection to the server. Please check your internet.</string>
 
     <!-- A11y -->
     <string name="a11y_poster">Movie poster</string>

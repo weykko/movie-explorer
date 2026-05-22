@@ -35,47 +35,64 @@ fun FavoritesScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        when {
-            state.isLoading -> CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center),
-                color = MaterialTheme.colorScheme.primary,
-            )
+        // Хедер показываем всегда — даже когда список избранного пуст.
+        FavoritesHeader(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 20.dp,
+                bottom = 12.dp,
+            ),
+        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            when {
+                state.isLoading -> CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.primary,
+                )
 
-            state.favorites.isEmpty() -> EmptyState(
-                message = stringResource(R.string.favorites_empty),
-                modifier = Modifier.align(Alignment.Center),
-            )
+                state.favorites.isEmpty() -> EmptyState(
+                    message = stringResource(R.string.favorites_empty),
+                    modifier = Modifier.align(Alignment.Center),
+                )
 
-            else -> LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                item {
-                    Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                        Text(
-                            text = stringResource(R.string.favorites_title),
-                            style = MaterialTheme.typography.displaySmall,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = stringResource(R.string.favorites_subtitle),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                else -> LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    items(items = state.favorites, key = Movie::id) { movie ->
+                        MovieCard(
+                            movie = movie,
+                            onClick = { onMovieClick(movie) },
+                            isFavorite = true,
                         )
                     }
+                    item { Spacer(Modifier.height(8.dp)) }
                 }
-                items(items = state.favorites, key = Movie::id) { movie ->
-                    MovieCard(movie = movie, onClick = { onMovieClick(movie) })
-                }
-                item { Spacer(Modifier.height(8.dp)) }
             }
         }
+    }
+}
+
+@Composable
+private fun FavoritesHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.favorites_title),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
+        Spacer(Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.favorites_subtitle),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }

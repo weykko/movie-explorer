@@ -45,7 +45,6 @@ class SearchViewModel(
         queryFlow.value = newQuery
         _uiState.value = _uiState.value.copy(
             query = newQuery,
-            // Слишком короткий запрос — сразу очищаем результаты, чтобы не путать пользователя.
             results = if (newQuery.trim().length < MIN_QUERY_LENGTH) emptyList() else _uiState.value.results,
             error = null,
             hasSearched = if (newQuery.isBlank()) false else _uiState.value.hasSearched,

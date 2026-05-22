@@ -22,6 +22,7 @@ import ru.urfu.movie_explorer.domain.usecase.RefreshPopularMoviesUseCase
 import ru.urfu.movie_explorer.domain.usecase.SearchMoviesUseCase
 import ru.urfu.movie_explorer.domain.usecase.ToggleFavoriteMovieUseCase
 import ru.urfu.movie_explorer.domain.usecase.UpdateMovieFiltersUseCase
+import ru.urfu.movie_explorer.domain.usecase.UpdateMovieSortUseCase
 import ru.urfu.movie_explorer.ui.common.FiltersBadgeCache
 import ru.urfu.movie_explorer.ui.screens.details.MovieDetailsViewModel
 import ru.urfu.movie_explorer.ui.screens.favorites.FavoritesViewModel
@@ -34,42 +35,38 @@ import ru.urfu.movie_explorer.ui.screens.search.SearchViewModel
  */
 val appModule = module {
 
-    // --- Networking ---
     single { NetworkFactory.createOkHttpClient(androidContext()) }
     single { NetworkFactory.createRetrofit(get()) }
     single { NetworkFactory.createImdbApi(get()) }
 
-    // --- Local storage ---
     single { AppDatabase.create(androidContext()) }
     single { get<AppDatabase>().favoriteMovieDao() }
     single { MovieFiltersDataStore(androidContext()) }
 
-    // --- Data repositories ---
     single<MovieRepository> { MovieRepositoryImpl(api = get()) }
     single<FavoriteMoviesRepository> { FavoriteMoviesRepositoryImpl(dao = get()) }
     single<MovieFiltersRepository> { MovieFiltersRepositoryImpl(dataStore = get()) }
 
-    // --- Shared in-memory cache (Practice 5, task 3) ---
     single { FiltersBadgeCache() }
 
-    // --- Domain (use cases) ---
     factory { ObservePopularMoviesUseCase(repository = get()) }
     factory { RefreshPopularMoviesUseCase(repository = get()) }
     factory { GetMovieDetailsUseCase(repository = get()) }
     factory { SearchMoviesUseCase(repository = get()) }
     factory { ObserveMovieFiltersUseCase(repository = get()) }
     factory { UpdateMovieFiltersUseCase(repository = get()) }
+    factory { UpdateMovieSortUseCase(repository = get()) }
     factory { ClearMovieFiltersUseCase(repository = get()) }
     factory { ObserveFavoriteMoviesUseCase(repository = get()) }
     factory { ObserveIsFavoriteUseCase(repository = get()) }
     factory { ToggleFavoriteMovieUseCase(repository = get()) }
 
-    // --- Presentation (ViewModels) ---
     viewModel {
         MoviesViewModel(
             observePopularMovies = get(),
             refreshPopularMovies = get(),
             observeMovieFilters = get(),
+            updateMovieSort = get(),
             filtersBadgeCache = get(),
         )
     }

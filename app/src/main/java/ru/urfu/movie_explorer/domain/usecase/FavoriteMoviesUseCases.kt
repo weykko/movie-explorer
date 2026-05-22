@@ -16,10 +16,6 @@ class ObserveIsFavoriteUseCase(
     operator fun invoke(movieId: String): Flow<Boolean> = repository.observeIsFavorite(movieId)
 }
 
-/**
- * Переключает признак «избранное» для указанного фильма.
- * Если фильм уже в избранном — удаляет, иначе добавляет.
- */
 class ToggleFavoriteMovieUseCase(
     private val repository: FavoriteMoviesRepository,
 ) {

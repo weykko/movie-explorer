@@ -18,9 +18,6 @@ import java.io.IOException
 
 /**
  * Реализация репозитория поверх IMDb API.
- *
- * Фильтрация по жанру/году/рейтингу выполняется через query-параметры эндпоинта `/titles`,
- * а не клиентски — это соответствует документации API (см. `api-methods.yaml`).
  */
 class MovieRepositoryImpl(
     private val api: ImdbApi,
@@ -37,7 +34,11 @@ class MovieRepositoryImpl(
                 limit = limit,
                 genres = filters.genre?.let { listOf(it) },
                 startYear = filters.minYear,
+                endYear = filters.maxYear,
                 minAggregateRating = filters.minRating,
+                minVoteCount = filters.minVoteCount,
+                sortBy = filters.sortBy?.apiValue,
+                sortOrder = filters.sortBy?.apiSortOrder,
             ).titles.map { it.toDomain() }
         }
         popularMoviesCache.value = movies

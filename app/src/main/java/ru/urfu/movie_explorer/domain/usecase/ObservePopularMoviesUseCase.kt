@@ -4,9 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import ru.urfu.movie_explorer.domain.model.Movie
 import ru.urfu.movie_explorer.domain.repository.MovieRepository
 
-/**
- * UseCase: подписаться на поток популярных фильмов из кэша репозитория.
- */
 class ObservePopularMoviesUseCase(
     private val repository: MovieRepository,
 ) {

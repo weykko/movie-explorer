@@ -6,12 +6,6 @@ import androidx.room.PrimaryKey
 
 /**
  * Запись избранного фильма в локальной БД.
- *
- * Хранит подмножество полей [ru.urfu.movie_explorer.domain.model.Movie], достаточное
- * для отображения карточки в списке избранного и базовых деталей без обращения к сети.
- * Списочные поля (`genres`, `cast`) сериализуются в строки с разделителем — Room не
- * умеет хранить коллекции «из коробки», а тащить полноценный TypeConverter ради двух
- * полей избыточно.
  */
 @Entity(tableName = "favorite_movies")
 data class FavoriteMovieEntity(

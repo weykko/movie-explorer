@@ -10,9 +10,6 @@ import ru.urfu.movie_explorer.domain.repository.FavoriteMoviesRepository
 
 /**
  * Реализация репозитория избранного поверх Room.
- *
- * Все CRUD-операции делегируются [FavoriteMovieDao]. Время добавления берётся
- * из системных часов и используется только для упорядочивания списка.
  */
 class FavoriteMoviesRepositoryImpl(
     private val dao: FavoriteMovieDao,

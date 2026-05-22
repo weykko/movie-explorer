@@ -6,9 +6,6 @@ import ru.urfu.movie_explorer.domain.model.MovieFilters
 
 /**
  * Контракт репозитория фильмов в доменном слое.
- *
- * Реализация (data-слой) знает про Retrofit/IMDb API. UseCase'ы и UI работают только с этим
- * интерфейсом, что позволяет легко подменить источник данных в тестах или в будущем.
  */
 interface MovieRepository {
 

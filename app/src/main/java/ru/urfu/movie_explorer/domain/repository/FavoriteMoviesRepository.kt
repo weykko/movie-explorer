@@ -5,9 +5,6 @@ import ru.urfu.movie_explorer.domain.model.Movie
 
 /**
  * Контракт хранилища «избранного».
- *
- * Реализация (data-слой) использует Room, что даёт офлайн-доступ к избранным
- * фильмам без обращения к сети.
  */
 interface FavoriteMoviesRepository {
 

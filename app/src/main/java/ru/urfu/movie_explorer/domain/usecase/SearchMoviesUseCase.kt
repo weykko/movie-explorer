@@ -3,9 +3,6 @@ package ru.urfu.movie_explorer.domain.usecase
 import ru.urfu.movie_explorer.domain.model.Movie
 import ru.urfu.movie_explorer.domain.repository.MovieRepository
 
-/**
- * UseCase: поиск фильмов по строке запроса.
- */
 class SearchMoviesUseCase(
     private val repository: MovieRepository,
 ) {
