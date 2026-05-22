@@ -2,6 +2,7 @@ package ru.urfu.movie_explorer.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import ru.urfu.movie_explorer.domain.model.Movie
+import ru.urfu.movie_explorer.domain.model.MovieFilters
 
 /**
  * Контракт репозитория фильмов в доменном слое.
@@ -18,10 +19,10 @@ interface MovieRepository {
     fun observePopularMovies(): Flow<List<Movie>>
 
     /**
-     * Загружает популярные фильмы и обновляет [observePopularMovies].
+     * Загружает фильмы с серверной фильтрацией ([filters]) и обновляет [observePopularMovies].
      * Может выбросить [ru.urfu.movie_explorer.domain.model.MovieError].
      */
-    suspend fun refreshPopularMovies(limit: Int)
+    suspend fun refreshPopularMovies(filters: MovieFilters, limit: Int)
 
     /**
      * Загружает фильм по его идентификатору.

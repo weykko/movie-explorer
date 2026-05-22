@@ -12,11 +12,15 @@ import ru.urfu.movie_explorer.data.network.api.ImdbApi
 import ru.urfu.movie_explorer.data.network.mapper.toDomain
 import ru.urfu.movie_explorer.domain.model.Movie
 import ru.urfu.movie_explorer.domain.model.MovieError
+import ru.urfu.movie_explorer.domain.model.MovieFilters
 import ru.urfu.movie_explorer.domain.repository.MovieRepository
 import java.io.IOException
 
 /**
  * Реализация репозитория поверх IMDb API.
+ *
+ * Фильтрация по жанру/году/рейтингу выполняется через query-параметры эндпоинта `/titles`,
+ * а не клиентски — это соответствует документации API (см. `api-methods.yaml`).
  */
 class MovieRepositoryImpl(
     private val api: ImdbApi,
@@ -27,9 +31,14 @@ class MovieRepositoryImpl(
 
     override fun observePopularMovies(): Flow<List<Movie>> = popularMoviesCache.asStateFlow()
 
-    override suspend fun refreshPopularMovies(limit: Int) {
+    override suspend fun refreshPopularMovies(filters: MovieFilters, limit: Int) {
         val movies = runNetwork {
-            api.getPopularTitles(limit = limit).titles.map { it.toDomain() }
+            api.getPopularTitles(
+                limit = limit,
+                genres = filters.genre?.let { listOf(it) },
+                startYear = filters.minYear,
+                minAggregateRating = filters.minRating,
+            ).titles.map { it.toDomain() }
         }
         popularMoviesCache.value = movies
     }

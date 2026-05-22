@@ -11,10 +11,19 @@ import ru.urfu.movie_explorer.data.network.dto.TitlesPageDto
  */
 interface ImdbApi {
 
-    /** Лента «свежих/популярных» фильмов. */
+    /**
+     * Лента фильмов с серверной фильтрацией.
+     *
+     * @param genres Список жанров (collectionFormat: multi — несколько `genres=` параметров).
+     * @param startYear Минимальный год выпуска (поиск по диапазону `[startYear, ∞)`).
+     * @param minAggregateRating Минимальный средний рейтинг IMDb (0.0–10.0).
+     */
     @GET("titles")
     suspend fun getPopularTitles(
         @Query("limit") limit: Int = DEFAULT_LIMIT,
+        @Query("genres") genres: List<String>? = null,
+        @Query("startYear") startYear: Int? = null,
+        @Query("minAggregateRating") minAggregateRating: Double? = null,
     ): TitlesPageDto
 
     /** Полная информация о фильме по его IMDb id. */

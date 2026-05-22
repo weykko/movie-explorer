@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,8 +24,9 @@ import androidx.navigation.toRoute
 import ru.urfu.movie_explorer.ui.navigation.Destination
 import ru.urfu.movie_explorer.ui.navigation.TopLevelTab
 import ru.urfu.movie_explorer.ui.screens.details.MovieDetailsScreen
+import ru.urfu.movie_explorer.ui.screens.favorites.FavoritesScreen
+import ru.urfu.movie_explorer.ui.screens.filters.FiltersScreen
 import ru.urfu.movie_explorer.ui.screens.movies.MoviesScreen
-import ru.urfu.movie_explorer.ui.screens.placeholder.PlaceholderScreen
 import ru.urfu.movie_explorer.ui.screens.search.SearchScreen
 
 /**
@@ -58,6 +58,7 @@ fun MovieExplorerApp() {
                         onMovieClick = { movie ->
                             navController.navigate(Destination.MovieDetails(movie.id))
                         },
+                        onOpenFilters = { navController.navigate(Destination.Filters) },
                     )
                 }
 
@@ -77,11 +78,16 @@ fun MovieExplorerApp() {
                     )
                 }
 
-                composable<Destination.Profile> {
-                    PlaceholderScreen(
-                        title = stringResource(TopLevelTab.Profile.labelResId),
-                        message = stringResource(ru.urfu.movie_explorer.R.string.profile_placeholder),
+                composable<Destination.Favorites> {
+                    FavoritesScreen(
+                        onMovieClick = { movie ->
+                            navController.navigate(Destination.MovieDetails(movie.id))
+                        },
                     )
+                }
+
+                composable<Destination.Filters> {
+                    FiltersScreen(onBackClick = { navController.popBackStack() })
                 }
             }
         }
@@ -106,7 +112,6 @@ private fun MovieExplorerBottomBar(
                     )
                 },
                 label = { Text(text = stringResource(tab.labelResId)) },
-                colors = NavigationBarItemDefaults.colors(),
                 alwaysShowLabel = true,
             )
         }
@@ -115,7 +120,7 @@ private fun MovieExplorerBottomBar(
 
 /**
  * Проверяет, является ли текущий destination одной из вкладок нижней навигации.
- * Для любого "внутреннего" экрана панель скрывается.
+ * Для любого «внутреннего» экрана панель скрывается.
  */
 private fun shouldShowBottomBar(destination: NavDestination?): Boolean {
     if (destination == null) return true
@@ -125,7 +130,7 @@ private fun shouldShowBottomBar(destination: NavDestination?): Boolean {
 private fun NavDestination.matches(tab: TopLevelTab): Boolean = when (tab) {
     TopLevelTab.Movies -> hasRoute<Destination.Movies>()
     TopLevelTab.Search -> hasRoute<Destination.Search>()
-    TopLevelTab.Profile -> hasRoute<Destination.Profile>()
+    TopLevelTab.Favorites -> hasRoute<Destination.Favorites>()
 }
 
 private fun NavHostController.navigateToTab(tab: TopLevelTab) {

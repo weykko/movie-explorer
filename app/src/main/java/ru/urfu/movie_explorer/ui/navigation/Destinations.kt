@@ -1,19 +1,17 @@
 package ru.urfu.movie_explorer.ui.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Movie
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 /**
  * Типизированные назначения (destinations) навигации на Navigation Compose + kotlinx.serialization.
- * Каждый destination — serializable объект или класс, который можно передавать
- * напрямую в `NavHost` и в вызовы `navigate(...)`.
  */
 sealed interface Destination {
 
@@ -27,7 +25,10 @@ sealed interface Destination {
     data object Search : Destination
 
     @Serializable
-    data object Profile : Destination
+    data object Favorites : Destination
+
+    @Serializable
+    data object Filters : Destination
 }
 
 /**
@@ -51,10 +52,10 @@ enum class TopLevelTab(
         selectedIcon = Icons.Rounded.Search,
         unselectedIcon = Icons.Outlined.Search,
     ),
-    Profile(
-        destination = Destination.Profile,
-        labelResId = ru.urfu.movie_explorer.R.string.nav_profile,
-        selectedIcon = Icons.Rounded.Person,
-        unselectedIcon = Icons.Outlined.Person,
+    Favorites(
+        destination = Destination.Favorites,
+        labelResId = ru.urfu.movie_explorer.R.string.nav_favorites,
+        selectedIcon = Icons.Rounded.Favorite,
+        unselectedIcon = Icons.Outlined.FavoriteBorder,
     ),
 }

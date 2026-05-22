@@ -4,7 +4,7 @@
     <!-- Bottom navigation -->
     <string name="nav_movies">Movies</string>
     <string name="nav_search">Search</string>
-    <string name="nav_profile">Profile</string>
+    <string name="nav_favorites">Favorites</string>
 
     <!-- Movies list -->
     <string name="movies_title">Popular Movies</string>
@@ -27,8 +27,24 @@
     <string name="search_hint">Start typing to see results</string>
     <string name="search_empty">Nothing matched your query</string>
 
-    <!-- Profile -->
-    <string name="profile_placeholder">Profile is under construction</string>
+    <!-- Favorites -->
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_subtitle">Movies you saved are available offline</string>
+    <string name="favorites_empty">No favorites yet. Tap the heart on a movie to save it.</string>
+    <string name="favorite_add">Add to favorites</string>
+    <string name="favorite_remove">Remove from favorites</string>
+
+    <!-- Filters -->
+    <string name="filters_title">Filters</string>
+    <string name="filters_open">Open filters</string>
+    <string name="filters_genre">Genre</string>
+    <string name="filters_any">Any</string>
+    <string name="filters_min_rating">Minimum rating</string>
+    <string name="filters_min_year">Released after (year)</string>
+    <string name="filters_apply">Apply</string>
+    <string name="filters_reset">Reset</string>
+    <string name="filters_active_badge">Filters are active</string>
+    <string name="filters_empty_result">No movies match the current filters</string>
 
     <!-- Common actions -->
     <string name="action_retry">Retry</string>

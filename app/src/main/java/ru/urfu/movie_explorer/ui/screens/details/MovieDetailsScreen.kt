@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.foundation.border
 import androidx.compose.material3.CircularProgressIndicator
@@ -64,6 +66,7 @@ fun MovieDetailsScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
+            val isFavorite by viewModel.isFavorite.collectAsStateWithLifecycle()
             TopAppBar(
                 title = { Text(text = stringResource(R.string.details_title)) },
                 navigationIcon = {
@@ -71,6 +74,24 @@ fun MovieDetailsScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.details_back),
+                        )
+                    }
+                },
+                actions = {
+                    val isContentLoaded = uiState is MovieDetailsUiState.Content
+                    IconButton(
+                        onClick = viewModel::onFavoriteToggleClicked,
+                        enabled = isContentLoaded,
+                    ) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Rounded.Favorite
+                            else Icons.Outlined.FavoriteBorder,
+                            contentDescription = stringResource(
+                                if (isFavorite) R.string.favorite_remove
+                                else R.string.favorite_add
+                            ),
+                            tint = if (isFavorite) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onBackground,
                         )
                     }
                 },
