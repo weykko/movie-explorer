@@ -13,6 +13,7 @@ import ru.urfu.movie_explorer.data.network.mapper.toDomain
 import ru.urfu.movie_explorer.domain.model.Movie
 import ru.urfu.movie_explorer.domain.model.MovieError
 import ru.urfu.movie_explorer.domain.model.MovieFilters
+import ru.urfu.movie_explorer.domain.repository.FavoriteMoviesRepository
 import ru.urfu.movie_explorer.domain.repository.MovieRepository
 import java.io.IOException
 
@@ -21,6 +22,7 @@ import java.io.IOException
  */
 class MovieRepositoryImpl(
     private val api: ImdbApi,
+    private val favoriteMoviesRepository: FavoriteMoviesRepository,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : MovieRepository {
 
@@ -46,6 +48,8 @@ class MovieRepositoryImpl(
 
     override suspend fun getMovieById(id: String): Movie {
         popularMoviesCache.value.firstOrNull { it.id == id }?.let { return it }
+
+        favoriteMoviesRepository.getFavorite(id)?.let { return it }
 
         return try {
             runNetwork { api.getTitle(titleId = id).toDomain() }

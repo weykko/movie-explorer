@@ -43,7 +43,7 @@ val appModule = module {
     single { get<AppDatabase>().favoriteMovieDao() }
     single { MovieFiltersDataStore(androidContext()) }
 
-    single<MovieRepository> { MovieRepositoryImpl(api = get()) }
+    single<MovieRepository> { MovieRepositoryImpl(api = get(), favoriteMoviesRepository = get()) }
     single<FavoriteMoviesRepository> { FavoriteMoviesRepositoryImpl(dao = get()) }
     single<MovieFiltersRepository> { MovieFiltersRepositoryImpl(dataStore = get()) }
 

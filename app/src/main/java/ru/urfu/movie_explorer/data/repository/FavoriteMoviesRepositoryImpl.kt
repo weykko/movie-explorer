@@ -21,6 +21,9 @@ class FavoriteMoviesRepositoryImpl(
     override fun observeIsFavorite(movieId: String): Flow<Boolean> =
         dao.observeIsFavorite(movieId)
 
+    override suspend fun getFavorite(movieId: String): Movie? =
+        dao.findById(movieId)?.toDomain()
+
     override suspend fun addToFavorites(movie: Movie) {
         dao.upsert(movie.toEntity(addedAt = System.currentTimeMillis()))
     }

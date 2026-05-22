@@ -14,6 +14,12 @@ interface FavoriteMoviesRepository {
     /** Поток флага «фильм с этим id в избранном». */
     fun observeIsFavorite(movieId: String): Flow<Boolean>
 
+    /**
+     * Одноразовое чтение избранного фильма из локальной БД. Используется, когда
+     * нужны детали без похода в сеть (оффлайн-режим). Возвращает `null`, если фильм не избран.
+     */
+    suspend fun getFavorite(movieId: String): Movie?
+
     /** Добавляет фильм в избранное. */
     suspend fun addToFavorites(movie: Movie)
 

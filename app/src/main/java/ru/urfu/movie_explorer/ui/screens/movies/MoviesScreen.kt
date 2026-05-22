@@ -78,8 +78,6 @@ private fun MoviesScreenContent(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Шапка экрана видна в любом состоянии — и при loading, и при ошибке, и когда
-    // фильтры вернули пустой поиск, чтобы пользователь мог поменять фильтры/сортировку.
     Column(
         modifier = modifier
             .fillMaxSize()
