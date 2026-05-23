@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.AddAPhoto
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.PhotoCamera
@@ -38,8 +39,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -129,7 +138,14 @@ fun EditProfileScreen(
         }
     }
 
+    val notificationsPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { _ ->
+        viewModel.save()
+    }
+
     var showSourceDialog by remember { mutableStateOf(false) }
+
 
     if (showSourceDialog) {
         AvatarSourceDialog(
@@ -217,11 +233,70 @@ fun EditProfileScreen(
                 shape = RoundedCornerShape(16.dp),
             )
 
+            var showTimePicker by remember { mutableStateOf(false) }
+            val movieTimeField = remember(uiState.movieTimeText) {
+                TextFieldValue(
+                    text = uiState.movieTimeText,
+                    selection = TextRange(uiState.movieTimeText.length),
+                )
+            }
+            OutlinedTextField(
+                value = movieTimeField,
+                onValueChange = { tfv -> viewModel.onMovieTimeTextChanged(tfv.text) },
+                singleLine = true,
+                isError = uiState.movieTimeError,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = stringResource(R.string.profile_movie_time)) },
+                placeholder = { Text(text = stringResource(R.string.profile_movie_time_hint)) },
+                supportingText = {
+                    Text(
+                        text = if (uiState.movieTimeError) {
+                            stringResource(R.string.profile_movie_time_invalid)
+                        } else {
+                            stringResource(R.string.profile_movie_time_subtitle)
+                        },
+                    )
+                },
+                trailingIcon = {
+                    IconButton(onClick = { showTimePicker = true }) {
+                        Icon(
+                            imageVector = Icons.Rounded.AccessTime,
+                            contentDescription = stringResource(R.string.profile_movie_time_pick),
+                        )
+                    }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                shape = RoundedCornerShape(16.dp),
+            )
+
+            if (showTimePicker) {
+                MovieTimePickerDialog(
+                    initialHour = uiState.movieTimeHour ?: DEFAULT_HOUR,
+                    initialMinute = uiState.movieTimeMinute ?: 0,
+                    onDismiss = { showTimePicker = false },
+                    onConfirm = { hour, minute ->
+                        showTimePicker = false
+                        viewModel.onMovieTimePicked(hour, minute)
+                    },
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                onClick = viewModel::save,
-                enabled = uiState.isInitialized,
+                onClick = {
+                    val needsPermission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        uiState.movieTimeHour != null &&
+                        ContextCompat.checkSelfPermission(
+                            context, Manifest.permission.POST_NOTIFICATIONS,
+                        ) != PackageManager.PERMISSION_GRANTED
+                    if (needsPermission) {
+                        notificationsPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        viewModel.save()
+                    }
+                },
+                enabled = uiState.canSave,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
             ) {
@@ -230,6 +305,38 @@ fun EditProfileScreen(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MovieTimePickerDialog(
+    initialHour: Int,
+    initialMinute: Int,
+    onDismiss: () -> Unit,
+    onConfirm: (hour: Int, minute: Int) -> Unit,
+) {
+    val state = rememberTimePickerState(
+        initialHour = initialHour,
+        initialMinute = initialMinute,
+        is24Hour = true,
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = stringResource(R.string.profile_movie_time_pick)) },
+        text = { TimePicker(state = state) },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(state.hour, state.minute) }) {
+                Text(text = stringResource(R.string.profile_done))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = stringResource(R.string.profile_cancel))
+            }
+        },
+    )
+}
+
+private const val DEFAULT_HOUR = 19
 
 @Composable
 private fun AvatarPicker(

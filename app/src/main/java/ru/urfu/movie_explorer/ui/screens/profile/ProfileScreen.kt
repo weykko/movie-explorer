@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.rounded.AccessTime
+
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 
@@ -93,6 +95,11 @@ fun ProfileScreen(
             )
         }
 
+        if (profile.movieTimeMinutes != null) {
+            Spacer(modifier = Modifier.height(20.dp))
+            MovieTimeRow(minutes = profile.movieTimeMinutes!!)
+        }
+
         if (!profile.socialUrl.isNullOrBlank()) {
             Spacer(modifier = Modifier.height(20.dp))
             SocialCard(
@@ -100,6 +107,38 @@ fun ProfileScreen(
                 onClick = { openExternal(context, profile.socialUrl!!) },
             )
         }
+    }
+}
+
+@Composable
+private fun MovieTimeRow(minutes: Int) {
+    val hour = minutes / 60
+    val minute = minutes % 60
+    val formatted = "%02d:%02d".format(hour, minute)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.AccessTime,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+        )
+        Spacer(modifier = Modifier.padding(end = 8.dp))
+        Text(
+            text = stringResource(R.string.profile_movie_time_label),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.padding(end = 8.dp))
+        Text(
+            text = formatted,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+        )
     }
 }
 

@@ -87,6 +87,21 @@
     <string name="profile_remove_avatar">Remove photo</string>
     <string name="profile_cancel">Cancel</string>
     <string name="profile_done">Done</string>
+    <string name="profile_movie_time">Movie time</string>
+    <string name="profile_movie_time_hint">HH:mm, e.g. 19:30</string>
+    <string name="profile_movie_time_invalid">Use HH:mm (00–23 : 00–59)</string>
+    <string name="profile_movie_time_pick">Pick time</string>
+    <string name="profile_movie_time_clear">Clear time</string>
+    <string name="profile_movie_time_subtitle">We’ll send a notification at this time</string>
+    <string name="profile_movie_time_label">Movie time:</string>
+
+    <!-- Notifications -->
+    <string name="movie_time_channel_name">Movie time</string>
+    <string name="movie_time_channel_description">Reminders about your favorite movie time</string>
+    <string name="movie_time_notification_title">It’s movie time!</string>
+    <string name="movie_time_notification_text_named">Hi %1$s, time to start your favorite movie.</string>
+    <string name="movie_time_notification_text_anonymous">Time to start your favorite movie.</string>
+
 
     <!-- A11y -->
     <string name="a11y_poster">Movie poster</string>

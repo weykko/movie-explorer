@@ -8,6 +8,9 @@ import ru.urfu.movie_explorer.data.local.preferences.MovieFiltersDataStore
 import ru.urfu.movie_explorer.data.local.preferences.UserProfileDataStore
 
 import ru.urfu.movie_explorer.data.network.NetworkFactory
+import ru.urfu.movie_explorer.data.notifications.MovieTimeReminderSchedulerImpl
+import ru.urfu.movie_explorer.domain.notifications.MovieTimeReminderScheduler
+
 import ru.urfu.movie_explorer.data.repository.FavoriteMoviesRepositoryImpl
 import ru.urfu.movie_explorer.data.repository.MovieFiltersRepositoryImpl
 import ru.urfu.movie_explorer.data.repository.MovieRepositoryImpl
@@ -62,6 +65,8 @@ val appModule = module {
     single<FavoriteMoviesRepository> { FavoriteMoviesRepositoryImpl(dao = get()) }
     single<MovieFiltersRepository> { MovieFiltersRepositoryImpl(dataStore = get()) }
     single<ProfileRepository> { ProfileRepositoryImpl(dataStore = get()) }
+    single<MovieTimeReminderScheduler> { MovieTimeReminderSchedulerImpl(context = androidContext()) }
+
 
 
     single { FiltersBadgeCache() }
@@ -113,6 +118,7 @@ val appModule = module {
         EditProfileViewModel(
             observeUserProfile = get(),
             updateUserProfile = get(),
+            reminderScheduler = get(),
         )
     }
 }

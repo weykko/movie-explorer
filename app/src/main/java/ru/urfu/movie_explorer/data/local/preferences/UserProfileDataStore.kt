@@ -5,7 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -26,6 +28,7 @@ class UserProfileDataStore(context: Context) {
                 nickname = prefs[KEY_NICKNAME]?.takeIf { it.isNotBlank() },
                 avatarUri = prefs[KEY_AVATAR_URI]?.takeIf { it.isNotBlank() },
                 socialUrl = prefs[KEY_SOCIAL_URL]?.takeIf { it.isNotBlank() },
+                movieTimeMinutes = prefs[KEY_MOVIE_TIME_MINUTES]?.takeIf { it in 0..MAX_MINUTES },
             )
         }
 
@@ -34,6 +37,12 @@ class UserProfileDataStore(context: Context) {
             prefs.putOrRemove(KEY_NICKNAME, profile.nickname)
             prefs.putOrRemove(KEY_AVATAR_URI, profile.avatarUri)
             prefs.putOrRemove(KEY_SOCIAL_URL, profile.socialUrl)
+            val minutes = profile.movieTimeMinutes
+            if (minutes != null && minutes in 0..MAX_MINUTES) {
+                prefs[KEY_MOVIE_TIME_MINUTES] = minutes
+            } else {
+                prefs.remove(KEY_MOVIE_TIME_MINUTES)
+            }
         }
     }
 
@@ -46,9 +55,11 @@ class UserProfileDataStore(context: Context) {
 
     private companion object {
         const val FILE_NAME = "user_profile"
+        const val MAX_MINUTES = 24 * 60 - 1
         val KEY_NICKNAME = stringPreferencesKey("nickname")
         val KEY_AVATAR_URI = stringPreferencesKey("avatar_uri")
         val KEY_SOCIAL_URL = stringPreferencesKey("social_url")
+        val KEY_MOVIE_TIME_MINUTES = intPreferencesKey("movie_time_minutes")
 
         val Context.userProfileDataStore by preferencesDataStore(name = FILE_NAME)
     }
