@@ -17,9 +17,6 @@ import ru.urfu.movie_explorer.domain.model.MovieSortOption
 
 /**
  * Тонкая обёртка над DataStore Preferences для [MovieFilters].
- *
- * Используется реализацией репозитория, чтобы вся работа с ключами Preferences
- * была сосредоточена в одном месте.
  */
 class MovieFiltersDataStore(context: Context) {
 

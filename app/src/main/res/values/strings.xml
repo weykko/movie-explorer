@@ -67,6 +67,27 @@
     <string name="error_request_failed">Something went wrong while loading movies. Try changing your filters or retry.</string>
     <string name="error_network">No connection to the server. Please check your internet.</string>
 
+    <!-- Profile -->
+    <string name="nav_profile">Profile</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_subtitle">Tap the pencil to fill in your details</string>
+    <string name="profile_empty_nickname">No nickname yet</string>
+    <string name="profile_empty_hint">Edit your profile to add a nickname and a social link</string>
+    <string name="profile_edit">Edit profile</string>
+    <string name="profile_edit_title">Edit profile</string>
+    <string name="profile_open_social">Open social</string>
+    <string name="profile_nickname">Nickname</string>
+    <string name="profile_nickname_hint">e.g. movie_lover</string>
+    <string name="profile_social">Social link</string>
+    <string name="profile_social_hint">https://t.me/your_handle</string>
+    <string name="profile_avatar">Avatar</string>
+    <string name="profile_pick_avatar">Choose photo source</string>
+    <string name="profile_pick_gallery">Gallery</string>
+    <string name="profile_pick_camera">Camera</string>
+    <string name="profile_remove_avatar">Remove photo</string>
+    <string name="profile_cancel">Cancel</string>
+    <string name="profile_done">Done</string>
+
     <!-- A11y -->
     <string name="a11y_poster">Movie poster</string>
 </resources>

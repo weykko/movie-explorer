@@ -27,7 +27,10 @@ import ru.urfu.movie_explorer.ui.screens.details.MovieDetailsScreen
 import ru.urfu.movie_explorer.ui.screens.favorites.FavoritesScreen
 import ru.urfu.movie_explorer.ui.screens.filters.FiltersScreen
 import ru.urfu.movie_explorer.ui.screens.movies.MoviesScreen
+import ru.urfu.movie_explorer.ui.screens.profile.ProfileScreen
+import ru.urfu.movie_explorer.ui.screens.profile.edit.EditProfileScreen
 import ru.urfu.movie_explorer.ui.screens.search.SearchScreen
+
 
 /**
  * Корневой composable: содержит нижнюю навигацию и граф экранов.
@@ -89,6 +92,19 @@ fun MovieExplorerApp() {
                 composable<Destination.Filters> {
                     FiltersScreen(onBackClick = { navController.popBackStack() })
                 }
+
+                composable<Destination.Profile> {
+                    ProfileScreen(
+                        onEditClick = { navController.navigate(Destination.EditProfile) },
+                    )
+                }
+
+                composable<Destination.EditProfile> {
+                    EditProfileScreen(
+                        onBackClick = { navController.popBackStack() },
+                        onFinished = { navController.popBackStack() },
+                    )
+                }
             }
         }
     }
@@ -131,6 +147,7 @@ private fun NavDestination.matches(tab: TopLevelTab): Boolean = when (tab) {
     TopLevelTab.Movies -> hasRoute<Destination.Movies>()
     TopLevelTab.Search -> hasRoute<Destination.Search>()
     TopLevelTab.Favorites -> hasRoute<Destination.Favorites>()
+    TopLevelTab.Profile -> hasRoute<Destination.Profile>()
 }
 
 private fun NavHostController.navigateToTab(tab: TopLevelTab) {
