@@ -1,3 +1,29 @@
 <resources>
-    <string name="app_name">movie-explorer</string>
+    <string name="app_name">Movie Explorer</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_movies">Фильмы</string>
+    <string name="nav_search">Поиск</string>
+    <string name="nav_profile">Профиль</string>
+
+    <!-- Movies list -->
+    <string name="movies_title">Популярные фильмы</string>
+    <string name="movies_subtitle">Подборка самых популярных фильмов за все время</string>
+
+    <!-- Movie details -->
+    <string name="details_title">О фильме</string>
+    <string name="details_overview">Описание</string>
+    <string name="details_genres">Жанры</string>
+    <string name="details_runtime">Длительность</string>
+    <string name="details_rating">Рейтинг</string>
+    <string name="details_year">Год</string>
+    <string name="details_director">Режиссёр</string>
+    <string name="details_back">Назад</string>
+
+    <!-- Other tabs -->
+    <string name="search_placeholder">Поиск скоро появится</string>
+    <string name="profile_placeholder">Профиль в разработке</string>
+
+    <!-- A11y -->
+    <string name="a11y_poster">Постер фильма</string>
 </resources>
