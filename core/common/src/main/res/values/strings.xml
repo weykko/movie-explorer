@@ -1,0 +1,12 @@
+<resources>
+    <!-- Имя приложения и заголовки нижней навигации — общие для всего приложения. -->
+    <string name="app_name">Movie Explorer</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Общие действия и a11y, доступные всем feature-модулям. -->
+    <string name="action_retry">Retry</string>
+    <string name="a11y_poster">Movie poster</string>
+</resources>

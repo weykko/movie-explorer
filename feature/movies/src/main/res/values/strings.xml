@@ -1,0 +1,27 @@
+<resources>
+    <!-- Список популярных фильмов. -->
+    <string name="movies_title">Movie Explorer</string>
+    <string name="movies_subtitle">A database for finding your favorite movies</string>
+    <string name="movies_filters_open">Open filters</string>
+    <string name="movies_sort_open">Sort</string>
+    <string name="movies_sort_none">Default (popularity)</string>
+    <string name="movies_sort_release_date">Release date</string>
+    <string name="movies_sort_user_rating">User rating</string>
+    <string name="movies_sort_rating_count">Number of ratings</string>
+    <string name="movies_filters_empty_result">No movies match the current filters</string>
+    <string name="movies_error_server_unavailable">Movie database is currently unavailable. Please try again later.</string>
+    <string name="movies_error_request_failed">Something went wrong while loading movies. Try changing your filters or retry.</string>
+    <string name="movies_error_network">No connection to the server. Please check your internet.</string>
+
+    <!-- Экран деталей фильма. -->
+    <string name="movie_details_title">About the Movie</string>
+    <string name="movie_details_overview">Overview</string>
+    <string name="movie_details_runtime">Runtime</string>
+    <string name="movie_details_year">Year</string>
+    <string name="movie_details_director">Director</string>
+    <string name="movie_details_cast">Cast</string>
+    <string name="movie_details_back">Back</string>
+    <string name="movie_details_favorite_add">Add to favorites</string>
+    <string name="movie_details_favorite_remove">Remove from favorites</string>
+    <string name="movie_details_loading_error">Failed to load data</string>
+</resources>

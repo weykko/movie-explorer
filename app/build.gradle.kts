@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.ksp)
 }
 
 android {
@@ -38,60 +37,30 @@ android {
         compose = true
         buildConfig = true
     }
+
+    sourceSets {
+        getByName("main") {
+            kotlin.srcDir("src/main/kotlin")
+        }
+    }
 }
 
 dependencies {
-    // Core
+    // Core modules
+    implementation(project(":core:common"))
+    implementation(project(":core:data"))
+
+    // Feature modules
+    implementation(project(":feature:movies"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:favorites"))
+    implementation(project(":feature:filters"))
+    implementation(project(":feature:profile"))
+
+    // Android & Koin
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-
-    // Compose
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.extended)
-
-    // ViewModel
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    // Navigation
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-
-    // ConstraintLayout for Compose
-    implementation(libs.androidx.constraintlayout.compose)
-
-    // Image loading
-    implementation(libs.coil.compose)
-
-    // DI (Koin)
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-
-    // Local storage: Room (DB) + DataStore (preferences)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.datastore.preferences)
-
-    // Networking
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.logging)
-
-    // Chucker — встроенный сетевой инспектор (debug only)
-    debugImplementation(libs.chucker)
-    releaseImplementation(libs.chucker.noop)
 
     // Tests
     testImplementation(libs.junit)

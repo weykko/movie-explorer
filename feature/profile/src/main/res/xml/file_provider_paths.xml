@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Пути, через которые FileProvider раздаёт content-Uri внешним приложениям (камере). -->
+<paths>
+    <cache-path name="avatars" path="avatars/" />
+</paths>
