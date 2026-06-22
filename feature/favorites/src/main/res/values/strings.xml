@@ -1,0 +1,5 @@
+<resources>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_subtitle">Movies you saved are available offline</string>
+    <string name="favorites_empty">No favorites yet. Tap the heart on a movie to save it.</string>
+</resources>

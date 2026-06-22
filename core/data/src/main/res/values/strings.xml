@@ -1,0 +1,8 @@
+<resources>
+    <!-- Уведомления «время для просмотра фильма». -->
+    <string name="movie_time_channel_name">Movie time</string>
+    <string name="movie_time_channel_description">Reminders about your favorite movie time</string>
+    <string name="movie_time_notification_title">It’s movie time!</string>
+    <string name="movie_time_notification_text_named">Hi %1$s, time to start your favorite movie.</string>
+    <string name="movie_time_notification_text_anonymous">Time to start your favorite movie.</string>
+</resources>
